@@ -74,6 +74,8 @@ function generate3WComponent(config,data,geom,map){
         map.removeLayer(dcGeoLayer);
     }
 
+    lookUpVDCCodeToName = genLookupVDCCodeToName(geom,config);
+
     var whoChart = dc.rowChart('#rc-3W-who');
     var whatChart = dc.rowChart('#rc-3W-what');
     var statusChart = dc.pieChart('#rc-3W-status');
@@ -106,6 +108,9 @@ function generate3WComponent(config,data,geom,map){
             .labelOffsetY(13)
             .colors([config.color])
             .colorAccessor(function(d, i){return 0;})
+            .label(function(d){
+                return d.key +' ('+d.value+')';
+            })            
             .xAxis().ticks(5);
 
     whatChart.width($('#rc-3W-what').width()).height(400)
@@ -179,14 +184,14 @@ function generate3WComponent(config,data,geom,map){
             })
             .createLeaflet(function(){
                 return map;
-            });
-            //.renderlet(function(e){
-            //    var html = "";
-            //    e.filters().forEach(function(l){
-            //        html += lookUpVDCCodeToName[l]+", ";
-            //    });
-            //    $('#mapfilter').html(html);
-            //});             
+            })
+            .renderlet(function(e){
+                var html = "";
+                e.filters().forEach(function(l){
+                    html += lookUpVDCCodeToName[l]+", ";
+                });
+                $('#mapfilter').html(html);
+            });             
 
     dc.renderAll();
     
