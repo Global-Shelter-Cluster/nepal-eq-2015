@@ -9,18 +9,31 @@ dc.leafletChart = function (_chart) {
     var _defaultCenter = false;
     var _defaultZoom = false;
 
+    var _createLeaflet = function(root) {
+        return L.map(root.node(),_mapOptions);
+    };    
+
     var _tiles = function (map) {
         L.tileLayer('https://a.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="http://openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
     };
 
-    _chart._doRender = function () {
-        _map = L.map(_chart.root().node(), _mapOptions);
+    _chart.createLeaflet = function(_) {
+        if(!arguments.length) {
+            return _createLeaflet;
+        }
+        _createLeaflet = _;
+        return _chart;
+    };    
+
+    _chart._doRender = function (map) {
+
+        _map = _createLeaflet(_chart.root());
         if (_defaultCenter && _defaultZoom) {
             _map.setView(_chart.toLocArray(_defaultCenter), _defaultZoom);
         }
-        _chart.tiles()(_map);
+        //_chart.tiles()(_map);
         _chart._postRender();
 
         return _chart._doRedraw();
@@ -627,17 +640,17 @@ dc.leafletChoroplethChart = function (parent, chartGroup) {
             if (_chart.hasFilter()) {
                 if (isSelectedGeo(v.d)) {
                     options.fillColor = _chart.getColor(v.d.value, v.i);
-                    options.opacity = 0.8;
-                    options.fillOpacity = 1;                                
+                    options.opacity = 1;
+                    options.fillOpacity = 0.5;                                
                 } else {
                     options.fillColor = _chart.getColor(0, v.i);
-                    options.opacity = 0.8;
-                    options.fillOpacity = 1;                                
+                    options.opacity = 1;
+                    options.fillOpacity = 0.5;                                
                 }
             } else {
                 options.fillColor = _chart.getColor(v.d.value, v.i);
-                options.opacity = 0.8;
-                options.fillOpacity = 1;                 
+                options.opacity = 1;
+                options.fillOpacity = 0.5;                 
             }           
         }
         return options;
@@ -687,6 +700,14 @@ dc.leafletChoroplethChart = function (parent, chartGroup) {
         _geojson = _;
         return _chart;
     };
+
+    _chart.geojsonLayer = function (_) {
+        if (!arguments.length) {
+            return _geojsonLayer;
+        }
+        _geojsonLayer = _;
+        return _chart;
+    };    
 
     _chart.featureOptions = function (_) {
         if (!arguments.length) {
