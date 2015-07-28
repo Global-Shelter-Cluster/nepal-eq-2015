@@ -34,7 +34,7 @@ function initDash(config,data,geom){
         style:{
             fillColor: "#000000",
             color: config.color,
-            weight: 2,
+            weight: 3,
             opacity: 1,
             fillOpacity: 0
         },
