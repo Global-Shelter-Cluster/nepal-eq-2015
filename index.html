@@ -28,45 +28,52 @@
     </head>
     <body>
         <div class="container">
-                <div id="header" class="row">
-                    <h2 id="title"></h2>
-                    <div class="col-md-8">  
-                        <p id="description"></p>
+                <div class="row">
+                    <div class="col-sm-8">  
+                        <h2 id="title"></h2>
                     </div>
-                    <div class="col-md-1">
-                        <a class="reset btn btn-primary btn-sm" id="reset" href="javascript:dc.filterAll();dc.redrawAll();">Reset All</a>
+                    <div id="logo" class="col-sm-4">  
+                        
+                    </div>                                             
+                </div>
+                <div id="header" class="row margintop20">
+                    <div class="col-sm-8">  
+                        <p id="description"></p>
                     </div>                            
-                    <div id="count-info" class="col-md-3">
+                    <div id="count-info" class="col-sm-3">
                         <span class="filter-count "></span> selected out of <span class="total-count "></span> records.
-                    </div>                   
+                    </div> 
+                    <div class="col-sm-1">
+                        <a class="reset btn btn-primary btn-sm" id="reset" href="javascript:dc.filterAll();dc.redrawAll();">Reset</a>
+                    </div>                                      
                 </div>
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-sm-8">
                         <p>Map | Current filter: <span id="mapfilter"></span></span></p>
                         <div class="rc-3w-viz" id="rc-3W-where"></div>                            
                     </div>
-                </div>
-                <div class="row margintop20">                    
-                    <div class="col-md-3">
-                        <div id="rc-3W-who" class="rc-3w-viz">
-                            <p>Who | Current filter: <span class="filter"></span></span></p>
-                        </div>                                
-                    </div>
-                    <div class="col-md-3">
+                    <div class="col-sm-4">
                         <div id="rc-3W-what" class="rc-3w-viz">
                             <p>What | Current filter: <span class="filter"></span></span></p>
                         </div>                                
-                    </div>                             
-                    <div class="col-sm-3">
+                    </div>                                         
+                </div>                             
+                <div class="row margintop20 heightfixed">                                          
+                    <div class="col-sm-4">
+                        <div id="rc-3W-who" class="rc-3w-viz">
+                            <p>Who | Current filter: <span class="filter"></span></span></p>
+                        </div>                                
+                    </div>                                                 
+                    <div class="col-sm-4">
                         <div class="rc-3w-viz" id="rc-3W-status">
-                            <p>VDCs confirmed | Current filter: <span class="filter"></span></span></p>
+                            <p>Status | Current filter: <span class="filter"></span></span></p>
                         </div>                              
                     </div>
-                    <div class="col-sm-3">
+                    <div class="col-sm-4">
                         <div class="rc-3w-viz" id="rc-3W-districtlevel">
-                            <p>District level stated only | Current filter: <span class="filter"></span></span></p>
-                        </div>                              
-                    </div>                                         
+                            <p>Declared at district level | Current filter: <span class="filter"></span></span></p>
+                        </div>                            
+                    </div>                                                         
                 </div>                
         </div>
         <script src="js/site.js"></script> 
