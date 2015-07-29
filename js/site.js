@@ -8,7 +8,7 @@ var config = {
     whatFieldName:"#activity+description",
     whereFieldName:"#adm4+code",
     statusFieldName:"#status",
-    groupFieldName:"#reached",
+    groupFieldName:"#reached+use",
     districtlevelFieldName:"#indicator",
     geo:"data/nepal_adm3.json",
     joinAttribute:"HLCIT_CODE",
@@ -47,7 +47,7 @@ function initDash(config,data,geom){
 
 function onEachFeature(feature, layer) {
     layer.on('click', function (e){
-        $.ajax({url: 'data/'+e.target.feature.properties.DISTRICT+'.json',
+        /*$.ajax({url: 'data/'+e.target.feature.properties.DISTRICT+'.json',
             success: function(result){
                 var geom = topojson.feature(result,result.objects[e.target.feature.properties.DISTRICT]);
                 var cf = crossfilter(data);
@@ -57,8 +57,49 @@ function onEachFeature(feature, layer) {
             error: function(error){
                 console.log(error);
             }
-        });        
+        });
+
+        var url = 'http://proxy.hxlstandard.org/data.json?filter_count=7&url=https%3A//docs.google.com/spreadsheets/d/1Z4YWDKWnrSJPcyFEyHawRck0SrXg6R0hBriH7gBZuqA/pub%3Foutput%3Dcsv&format=html&filter01=cut&cut-include-tags01=%23adm3%2Bcode%2C%23adm4%2Bcode%2C%23org%2Bimplementing%2C%23activity%2Bdescription%2C%23status%2C%23reached%2C%23indicator&cut-exclude-tags01=&filter02=select&select-query02-01=%23adm3%2Bcode%3D'+code
+        $.ajax({url: url,
+          success: function(data) {
+
+          },
+          error: function(e) {
+             console.log(e);
+          }
+       });*/
+        var url = 'http://proxy.hxlstandard.org/data.json?filter_count=7&url=https%3A//docs.google.com/spreadsheets/d/1Z4YWDKWnrSJPcyFEyHawRck0SrXg6R0hBriH7gBZuqA/export%3Fformat%3Dcsv%26id%3D1Z4YWDKWnrSJPcyFEyHawRck0SrXg6R0hBriH7gBZuqA%26gid%3D0&strip-headers=on&format=html&filter01=cut&cut-include-tags01=%23adm3%2Bcode%2C%23adm4%2Bcode%2C%23org%2Bimplementing%2C%23activity%2Bdescription%2C%23status%2C%23reached%2Buse%2C%23indicator&cut-exclude-tags01=&filter02=select&select-query02-01=adm3%2Bcode%3D'+e.target.feature.properties.HLCIT_CODE
+        var dataCall = $.ajax({ 
+            type: 'GET', 
+            url: url, 
+            dataType: 'json',
+            error:function(e,exception){
+                console.log(exception);
+            }
+        });
+
+        //load geometry
+
+        var geomCall = $.ajax({ 
+            type: 'GET', 
+            url: 'data/'+e.target.feature.properties.DISTRICT+'.json', 
+            dataType: 'json',
+        });
+
+        $.when(dataCall, geomCall).then(function(dataArgs, geomArgs){
+            console.log(dataArgs);
+            console.log(geomArgs);
+            console.log(e.target.feature.properties.DISTRICT);
+            var data = hxlProxyToJSON(dataArgs[0])
+            console.log(data);
+            var geom = topojson.feature(geomArgs[0],geomArgs[0].objects[e.target.feature.properties.DISTRICT]);
+            generate3WComponent(config,data,geom,map)
+        });                    
     });
+}
+
+function filterDataSet(code){
+
 }
 
 function generate3WComponent(config,data,geom,map){
@@ -233,6 +274,33 @@ function genLookupVDCCodeToName(geojson,config){
     return lookup;
 }
 
+function hxlProxyToJSON(input){
+    var input = stripIfNull(input);
+    var output = [];
+    var keys=[]
+    input.forEach(function(e,i){
+        if(i==0){
+            keys = e;
+        } else {
+            var row = {};
+            e.forEach(function(e2,i2){
+                row[keys[i2]] = e2;
+            });
+            output.push(row);
+        }
+    });
+    return output;
+}
+
+function stripIfNull(input){
+    console.log(input);
+    if(input[0][0]==null){
+        input.shift();
+        return input;
+    }
+    return input;
+}
+
 //load 3W data
 var map;
 var lookUpVDCCodeToName;
@@ -257,7 +325,6 @@ var geomCall = $.ajax({
 
 $.when(dataCall, geomCall).then(function(dataArgs, geomArgs){
     data = dataArgs[0];
-    console.log(data);
     var geom = topojson.feature(geomArgs[0],geomArgs[0].objects.nepal_adm3);
     geom.features.forEach(function(e){
         e.properties[config.joinAttribute] = String(e.properties[config.joinAttribute]); 
