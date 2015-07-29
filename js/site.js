@@ -40,6 +40,19 @@ function initDash(config,geom){
         },
         onEachFeature: onEachFeature
     }).addTo(map);
+
+    var info = L.control();
+
+    info.onAdd = function (map) {
+        div = L.DomUtil.create('div', 'hdx-3w-info');
+            return div;
+        };
+
+
+    info.addTo(map);
+    
+    $('.hdx-3w-info').html('Hover for name');
+    
     map.scrollWheelZoom.disable();
     zoomToGeom(geom);
 
@@ -80,7 +93,7 @@ function onEachFeature(feature, layer) {
     })
 
     layer.on('mouseout', function(e){
-        $('.hdx-3w-info').html=('Hover for name');
+        $('.hdx-3w-info').html('Hover for name');
     })    
 }
 
