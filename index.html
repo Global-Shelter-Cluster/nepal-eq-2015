@@ -1,19 +1,21 @@
 <html>
     <head>
-        <title>3W Dashboard</title>
+        <title>Shelter Cluster Dashboard</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" ype="text/css" href="css/bootstrap.min.css"/>
         <link rel="stylesheet" type="text/css" href="css/dc.css"/>
         <link rel="stylesheet" type="text/css" href="css/leaflet.css"/>
         <link rel="stylesheet" type="text/css" href="css/site.css"/>
-        <script src="js/jquery.js"></script>
+        <script src="js/jquery-2.1.4.min.js"></script>
         <script src="js/d3.min.js"></script>
         <script src="js/crossfilter.v1.min.js"></script>
-        <script src="js/dc.js"></script>
+        <script src="js/dc.min.js"></script>
         <script src="js/leaflet.js"></script>
         <script src="js/dc.leaflet.js"></script>
         <script src="js/topojson.v1.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="data/nepal_adm3.js"></script>
         <script type="text/javascript">
             var _gaq = _gaq || [];
             _gaq.push(['_setAccount', 'UA-46399763-1']);
@@ -53,29 +55,30 @@
                         <div class="rc-3w-viz" id="rc-3W-where"></div>                            
                     </div>
                     <div class="col-sm-4">
-                        <div id="rc-3W-what" class="rc-3w-viz">
-                            <p>What | Current filter: <span class="filter"></span></span></p>
-                        </div>                                
+                        <div id="rc-3W-what" class="rc-3w-viz"></div>                                
                     </div>                                         
                 </div>                             
                 <div class="row margintop20 heightfixed">                                          
                     <div class="col-sm-4">
-                        <div id="rc-3W-who" class="rc-3w-viz">
-                            <p>Who | Current filter: <span class="filter"></span></span></p>
-                        </div>                                
+                        <div id="rc-3W-who" class="rc-3w-viz"></div>                                
                     </div>                                                 
                     <div class="col-sm-4">
-                        <div class="rc-3w-viz" id="rc-3W-status">
-                            <p>Status | Current filter: <span class="filter"></span></span></p>
-                        </div>                              
+                        <div class="rc-3w-viz" id="rc-3W-status"></div>                              
                     </div>
                     <div class="col-sm-4">
-                        <div class="rc-3w-viz" id="rc-3W-districtlevel">
-                            <p>Declared at district level | Current filter: <span class="filter"></span></span></p>
-                        </div>                            
+                        <div class="rc-3w-viz" id="rc-3W-districtlevel"></div>                            
                     </div>                                                         
                 </div>                
         </div>
+        <div id="modal" class="modal fade" role="dialog">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div id="loading" class="modal-body">
+                        <h2>Loading</h2>
+                    </div>
+                </div>
+            </div>
+        </div>        
         <script src="js/site.js"></script> 
     </body>
 </html>
