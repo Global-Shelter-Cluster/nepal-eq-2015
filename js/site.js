@@ -1,7 +1,7 @@
 //configuration object
 
 var config = {
-    title:"Nepal Earthquake Shelter Cluster 3W",
+    title:"Nepal Earthquake Shelter Cluster Activity Dashboard",
     description:"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
     data:"data/data.json",
     whoFieldName:"#org+implementing",
@@ -13,7 +13,7 @@ var config = {
     geo:"data/nepal_adm3.json",
     joinAttribute:"HLCIT_CODE",
     nameAttribute:"VDC_NAME",
-    color:"#A46465",
+    color:"#B78C8D",
     colors:["#DDDDDD","#CAB4B5","#B78C8D","#A46465","#913C3D","#7F1416"],
     colors2:["#CAB4B5","#B78C8D","#A46465","#913C3D","#7F1416"]
 };
@@ -32,11 +32,11 @@ function initDash(config,geom){
 
     var overlay = L.geoJson(geom,{
         style:{
-            fillColor: "#000000",
-            color: config.color,
+            fillColor: "#7F1416",
+            color: "#7F1416",
             weight: 3,
             opacity: 1,
-            fillOpacity: 0
+            fillOpacity: 0.1
         },
         onEachFeature: onEachFeature
     }).addTo(map);
@@ -51,7 +51,7 @@ function initDash(config,geom){
 
     info.addTo(map);
     
-    $('.hdx-3w-info').html('Hover for name');
+    $('.hdx-3w-info').html('Click a district to see district level data');
     
     map.scrollWheelZoom.disable();
     zoomToGeom(geom);
@@ -62,7 +62,7 @@ function onEachFeature(feature, layer) {
     layer.on('click', function (e){
         $('#modal').modal('show'); 
 
-        var url = 'http://proxy.hxlstandard.org/data.json?filter_count=7&url=https%3A//docs.google.com/spreadsheets/d/1Z4YWDKWnrSJPcyFEyHawRck0SrXg6R0hBriH7gBZuqA/export%3Fformat%3Dcsv%26id%3D1Z4YWDKWnrSJPcyFEyHawRck0SrXg6R0hBriH7gBZuqA%26gid%3D0&strip-headers=on&format=html&filter01=cut&cut-include-tags01=%23adm3%2Bcode%2C%23adm4%2Bcode%2C%23org%2Bimplementing%2C%23activity%2Bdescription%2C%23status%2C%23reached%2Buse%2C%23indicator&cut-exclude-tags01=&filter02=select&select-query02-01=adm3%2Bcode%3D'+e.target.feature.properties.HLCIT_CODE
+        var url = 'http://beta.proxy.hxlstandard.org/data.json?filter_count=7&url=https%3A//docs.google.com/spreadsheets/d/1Z4YWDKWnrSJPcyFEyHawRck0SrXg6R0hBriH7gBZuqA/export%3Fformat%3Dcsv%26id%3D1Z4YWDKWnrSJPcyFEyHawRck0SrXg6R0hBriH7gBZuqA%26gid%3D0&strip-headers=on&format=html&filter01=cut&cut-include-tags01=%23adm3%2Bcode%2C%23adm4%2Bcode%2C%23org%2Bimplementing%2C%23activity%2Bdescription%2C%23status%2C%23reached%2Buse%2C%23indicator&cut-exclude-tags01=&filter02=select&select-query02-01=adm3%2Bcode%3D'+e.target.feature.properties.HLCIT_CODE
         var dataCall = $.ajax({ 
             type: 'GET', 
             url: url, 
@@ -93,7 +93,7 @@ function onEachFeature(feature, layer) {
     })
 
     layer.on('mouseout', function(e){
-        $('.hdx-3w-info').html('Hover for name');
+        $('.hdx-3w-info').html('Click a district to see district level data');
     })    
 }
 
@@ -114,7 +114,7 @@ function generate3WComponent(config,data,geom,map){
 
     var whoChart = dc.rowChart('#rc-3W-who');
     var whatChart = dc.rowChart('#rc-3W-what');
-    var statusChart = dc.pieChart('#rc-3W-status');
+    var statusChart = dc.rowChart('#rc-3W-status');
     var districtlevelChart = dc.pieChart('#rc-3W-districtlevel');
     var whereChart = dc.leafletChoroplethChart('#rc-3W-where');
 
@@ -134,13 +134,11 @@ function generate3WComponent(config,data,geom,map){
     var whereGroup = whereDimension.group().reduceSum(function(d) {return d[config.groupFieldName];});
     var all = cf.groupAll();
 
-    whoChart.width($('#rc-3W-who').width()).height(300)
+    whoChart.width($('#rc-3W-who').width()).height(750)
             .dimension(whoDimension)
             .group(whoGroup)
             .elasticX(true)
-            .data(function(group) {
-                return group.top(15);
-            })
+            .ordering(function(d){ return -d.value;})
             .colors([config.color])
             .colorAccessor(function(d, i){return 0;})
             .label(function(d){
@@ -148,13 +146,11 @@ function generate3WComponent(config,data,geom,map){
             })            
             .xAxis().ticks(5);
 
-    whatChart.width($('#rc-3W-what').width()).height(400)
+    whatChart.width($('#rc-3W-what').width()).height(300)
             .dimension(whatDimension)
             .group(whatGroup)
             .elasticX(true)
-            .data(function(group) {
-                return group.top(15);
-            })
+            .ordering(function(d){ return -d.value;})
             .colors([config.color])
             .colorAccessor(function(d, i){return 0;})
             .label(function(d){
@@ -165,11 +161,16 @@ function generate3WComponent(config,data,geom,map){
     statusChart.width($('#rc-3W-status').width()).height(300)
             .dimension(statusDimension)
             .group(statusGroup)
-            .colors(config.colors2)
-            .colorDomain([0, 4])
-            .colorAccessor(function(d, i){return i;});
+            .elasticX(true)
+            .ordering(function(d){ return -d.value;})
+            .colors([config.color])
+            .colorAccessor(function(d, i){return 0;})
+            .label(function(d){
+                return d.key +' ('+d.value+')';
+            })            
+            .xAxis().ticks(5);
 
-    districtlevelChart.width($('#rc-3W-districtlevel').width()).height(300)
+    districtlevelChart.width($('#rc-3W-districtlevel').width()).height(100)
             .dimension(districtlevelDimension)
             .group(districtlevelGroup)
             .colors(config.colors2)
@@ -190,13 +191,13 @@ function generate3WComponent(config,data,geom,map){
             .colorDomain([0, 5])
             .colorAccessor(function (d) {
                 var c=0;
-                if(d>500){
+                if(d>5000){
                     c=5;
-                } else if (d>250) {
+                } else if (d>1000) {
                     c=4;
-                } else if (d>100) {
+                } else if (d>250) {
                     c=3;
-                } else if (d>50) {
+                } else if (d>100) {
                     c=2;
                 }  else if (d>0) {
                     c=1;
@@ -206,7 +207,7 @@ function generate3WComponent(config,data,geom,map){
             .featureKeyAccessor(function(feature){
                 return feature.properties[config.joinAttribute];
             }).popup(function(feature){
-                return feature.properties[config.nameAttribute];
+                return feature.properties[config.nameAttribute] + ' - HHs reached';
             })
             .renderPopup(true)
             .featureOptions({
@@ -240,7 +241,7 @@ function generate3WComponent(config,data,geom,map){
         .attr('class', 'x-axis-label')
         .attr('text-anchor', 'middle')
         .attr('x', $('#rc-3W-who').width()/2)
-        .attr('y', 298)
+        .attr('y', 748)
         .text('Households Reached');
 
     var g = d3.selectAll('#rc-3W-what').select('svg').append('g');
@@ -249,8 +250,17 @@ function generate3WComponent(config,data,geom,map){
         .attr('class', 'x-axis-label')
         .attr('text-anchor', 'middle')
         .attr('x', $('#rc-3W-what').width()/2)
-        .attr('y', 398)
+        .attr('y', 298)
         .text('Households Reached');
+
+    var g = d3.selectAll('#rc-3W-status').select('svg').append('g');
+    
+    g.append('text')
+        .attr('class', 'x-axis-label')
+        .attr('text-anchor', 'middle')
+        .attr('x', $('#rc-3W-status').width()/2)
+        .attr('y', 298)
+        .text('Households Reached');        
 
 }
 
