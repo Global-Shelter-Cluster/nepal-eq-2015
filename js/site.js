@@ -1,7 +1,7 @@
 //configuration object
 
 var config = {
-    title:"Nepal Earthquake Shelter Cluster 3W",
+    title:"Nepal Earthquake Shelter Cluster Activity Dashboard",
     description:"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
     data:"data/data.json",
     whoFieldName:"#org+implementing",
@@ -138,6 +138,7 @@ function generate3WComponent(config,data,geom,map){
             .dimension(whoDimension)
             .group(whoGroup)
             .elasticX(true)
+            .ordering(function(d){ return -d.value;})
             .colors([config.color])
             .colorAccessor(function(d, i){return 0;})
             .label(function(d){
@@ -149,6 +150,7 @@ function generate3WComponent(config,data,geom,map){
             .dimension(whatDimension)
             .group(whatGroup)
             .elasticX(true)
+            .ordering(function(d){ return -d.value;})
             .colors([config.color])
             .colorAccessor(function(d, i){return 0;})
             .label(function(d){
@@ -160,6 +162,7 @@ function generate3WComponent(config,data,geom,map){
             .dimension(statusDimension)
             .group(statusGroup)
             .elasticX(true)
+            .ordering(function(d){ return -d.value;})
             .colors([config.color])
             .colorAccessor(function(d, i){return 0;})
             .label(function(d){
