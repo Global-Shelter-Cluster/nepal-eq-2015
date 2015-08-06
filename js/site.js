@@ -89,7 +89,7 @@ function onEachFeature(feature, layer) {
     });
 
     layer.on('mouseover', function(e){
-        $('.hdx-3w-info').html(e.target.feature.properties.DISTRICT);
+        $('.hdx-3w-info').html('Click to view '+e.target.feature.properties.DISTRICT);
     })
 
     layer.on('mouseout', function(e){
@@ -175,7 +175,8 @@ function generate3WComponent(config,data,geom,map){
             .group(districtlevelGroup)
             .colors(config.colors2)
             .colorDomain([0, 4])
-            .colorAccessor(function(d, i){return i;});            
+            .colorAccessor(function(d, i){return i;})
+            .xAxis().ticks(5);            
 
     dc.dataCount('#count-info')
             .dimension(cf)
