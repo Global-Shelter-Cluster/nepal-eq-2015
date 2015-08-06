@@ -175,8 +175,7 @@ function generate3WComponent(config,data,geom,map){
             .group(districtlevelGroup)
             .colors(config.colors2)
             .colorDomain([0, 4])
-            .colorAccessor(function(d, i){return i;})
-            .xAxis().ticks(5);            
+            .colorAccessor(function(d, i){return i;});           
 
     dc.dataCount('#count-info')
             .dimension(cf)
