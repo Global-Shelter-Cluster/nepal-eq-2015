@@ -85,3 +85,17 @@
  #loading{
     text-align:center;
  }
+
+.btn {
+    background-color:#7F1416;
+    border-color:#7F1416;
+}
+
+.btn:hover {
+    background-color:#7F1416;
+    border-color:#7F1416;
+ }
+
+ #district_name {
+    margin:0px;
+ }

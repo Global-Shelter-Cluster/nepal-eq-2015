@@ -16,6 +16,7 @@
         <script src="js/topojson.v1.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
         <script src="data/nepal_adm3.js"></script>
+        <script src="js/tile.stamen.js"></script>
         <script type="text/javascript">
             var _gaq = _gaq || [];
             _gaq.push(['_setAccount', 'UA-46399763-1']);
@@ -39,40 +40,53 @@
                     </div>                                             
                 </div>
                 <div id="header" class="row margintop20">
-                    <div class="col-sm-8">  
+                    <div class="col-sm-12">  
                         <p id="description"></p>
-                    </div>                            
+                    </div>                                                                  
+                </div>
+                <div id="info_row" class="row">
+                    <div class="col-sm-5">
+                        <h2 id="district_name"></h2>
+                    </div>
+                    <div class="col-sm-2">
+                        <a class="reset btn btn-primary btn-sm" href="">Reset Dashboard</a>
+                    </div> 
+                    <div class="col-sm-2">
+                        <a id="clearfilters" class="reset btn btn-primary btn-sm" href="javascript:dc.filterAll();dc.redrawAll();">Clear Filters</a>
+                    </div> 
                     <div id="count-info" class="col-sm-3">
                         <span class="filter-count "></span> selected out of <span class="total-count "></span> records.
-                    </div> 
-                    <div class="col-sm-1">
-                        <a class="reset btn btn-primary btn-sm" id="reset" href="javascript:dc.filterAll();dc.redrawAll();">Reset</a>
-                    </div>                                      
+                    </div>                                                           
                 </div>
-                <div class="row">
-                    <div class="col-sm-8">
-                        <div class="row">
-                            <p>Map | Current filter: <span id="mapfilter"></span></span></p>
-                            <div class="rc-3w-viz" id="rc-3W-where"></div>
-                        </div>
-                        <div class="row margintop20 heightfixed">                                          
-                            <div class="col-sm-5">
-                                <div id="rc-3W-what" class="rc-3w-viz"></div>                                
-                            </div>                                                 
-                            <div class="col-sm-5">
-                                <div class="rc-3w-viz" id="rc-3W-status"></div>                              
+                <div class="row magintop20">
+                    
+                </div>                
+                <div class="row margintop20">
+                        <div class="col-sm-8">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <p>Map | Current filter: <span id="mapfilter"></span></span></p>
+                                    <div class="rc-3w-viz" id="rc-3W-where"></div>
+                                </div>
                             </div>
-                            <div class="col-sm-2">                                          
-                                <div class="rc-3w-viz" id="rc-3W-districtlevel"></div>                              
-                            </div>                             
-                        </div>                              
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="row">                       
-                            <div id="rc-3W-who" class="rc-3w-viz"></div>                                
-                        </div>                         
-                    </div>                                                             
-                </div>                                            
+                            <div class="row margintop20 heightfixed">                                          
+                                <div class="col-sm-5">
+                                    <div id="rc-3W-what" class="rc-3w-viz"></div>                                
+                                </div>                                                 
+                                <div class="col-sm-5">
+                                    <div class="rc-3w-viz" id="rc-3W-status"></div>                              
+                                </div>
+                                <div class="col-sm-2">                                          
+                                    <div class="rc-3w-viz" id="rc-3W-districtlevel"></div>                              
+                                </div>                             
+                            </div>                              
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="row">                       
+                                <div id="rc-3W-who" class="rc-3w-viz"></div>                                
+                            </div>                         
+                        </div>                                                             
+                </div>                                       
         </div>
         <div id="modal" class="modal fade" role="dialog">
             <div class="modal-dialog modal-sm">

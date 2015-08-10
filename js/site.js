@@ -8,8 +8,8 @@ var config = {
     whatFieldName:"#activity+description",
     whereFieldName:"#adm4+code",
     statusFieldName:"#status",
-    groupFieldName:"#reached+use",
-    districtlevelFieldName:"#indicator",
+    groupFieldName:"#reached+households",
+    districtlevelFieldName:"#indicator+parent",
     geo:"data/nepal_adm3.json",
     joinAttribute:"HLCIT_CODE",
     nameAttribute:"VDC_NAME",
@@ -26,9 +26,17 @@ function initDash(config,geom){
 
     map = L.map('rc-3W-where',{});
 
-    L.tileLayer('https://a.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    /*L.tileLayer('https://a.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="http://openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
+
+    L.tileLayer('https://c.tiles.mapbox.com/v3/examples.map-szwdot65/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="http://openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);*/
+
+    var baselayer = new L.StamenTileLayer("toner");
+
+    map.addLayer(baselayer);
 
     var overlay = L.geoJson(geom,{
         style:{
@@ -61,8 +69,10 @@ function initDash(config,geom){
 function onEachFeature(feature, layer) {
     layer.on('click', function (e){
         $('#modal').modal('show'); 
-
-        var url = 'http://beta.proxy.hxlstandard.org/data.json?filter_count=7&url=https%3A//docs.google.com/spreadsheets/d/1Z4YWDKWnrSJPcyFEyHawRck0SrXg6R0hBriH7gBZuqA/export%3Fformat%3Dcsv%26id%3D1Z4YWDKWnrSJPcyFEyHawRck0SrXg6R0hBriH7gBZuqA%26gid%3D0&strip-headers=on&format=html&filter01=cut&cut-include-tags01=%23adm3%2Bcode%2C%23adm4%2Bcode%2C%23org%2Bimplementing%2C%23activity%2Bdescription%2C%23status%2C%23reached%2Buse%2C%23indicator&cut-exclude-tags01=&filter02=select&select-query02-01=adm3%2Bcode%3D'+e.target.feature.properties.HLCIT_CODE
+        //suspect e.target.feature.properties.DISTRICT will not work on multi-polygons
+        $('#district_name').html(e.target.feature.properties.DISTRICT);
+        //var url = 'http://beta.proxy.hxlstandard.org/data.json?filter_count=7&url=https%3A//docs.google.com/spreadsheets/d/1Z4YWDKWnrSJPcyFEyHawRck0SrXg6R0hBriH7gBZuqA/export%3Fformat%3Dcsv%26id%3D1Z4YWDKWnrSJPcyFEyHawRck0SrXg6R0hBriH7gBZuqA%26gid%3D0&strip-headers=on&format=html&filter01=cut&cut-include-tags01=%23adm3%2Bcode%2C%23adm4%2Bcode%2C%23org%2Bimplementing%2C%23activity%2Bdescription%2C%23status%2C%23reached%2Buse%2C%23indicator&cut-exclude-tags01=&filter02=select&force=1&select-query02-01=adm3%2Bcode%3D'+e.target.feature.properties.HLCIT_CODE
+        var url = 'http://proxy.hxlstandard.org/data.json?filter_count=7&url=https%3A//docs.google.com/spreadsheets/d/1Z4YWDKWnrSJPcyFEyHawRck0SrXg6R0hBriH7gBZuqA/pub%3Fgid%3D0%26single%3Dtrue%26output%3Dcsv&strip-headers=on&format=html&filter01=cut&cut-include-tags01=%23adm3%2Bcode%2C%23adm4%2Bcode%2C%23org%2Bimplementing%2C%23activity%2Bdescription%2C%23reached%2Bhouseholds%2C%23indicator%2Bparent%2C%23status&cut-exclude-tags01=&filter02=select&select-query02-01=%23adm3%2Bcode%3D'+e.target.feature.properties.HLCIT_CODE;
         var dataCall = $.ajax({ 
             type: 'GET', 
             url: url, 
@@ -81,6 +91,7 @@ function onEachFeature(feature, layer) {
         });
 
         $.when(dataCall, geomCall).then(function(dataArgs, geomArgs){
+            $('#info_row').show();
             var data = hxlProxyToJSON(dataArgs[0])
             var geom = topojson.feature(geomArgs[0],geomArgs[0].objects[e.target.feature.properties.DISTRICT]);
             $('#modal').modal('hide');
@@ -179,7 +190,14 @@ function generate3WComponent(config,data,geom,map){
 
     dc.dataCount('#count-info')
             .dimension(cf)
-            .group(all);
+            .group(all)
+            .on('renderlet',function(c){
+                if(c.dimension().size() > c.group().value()){
+                    $('#clearfilters').show();
+                } else {
+                    $('#clearfilters').hide();
+                }
+            });
 
     whereChart.width($('#rc-3W-where').width()).height(300)
             .dimension(whereDimension)
@@ -292,6 +310,7 @@ function hxlProxyToJSON(input){
             output.push(row);
         }
     });
+    console.log(output);
     return output;
 }
 
@@ -308,9 +327,10 @@ var map;
 var lookUpVDCCodeToName;
 var data;
 var dcGeoLayer = '';
+var dataurl = 'http://proxy.hxlstandard.org/data.json?filter_count=7&url=https%3A//docs.google.com/spreadsheets/d/1Z4YWDKWnrSJPcyFEyHawRck0SrXg6R0hBriH7gBZuqA/pub%3Fgid%3D0%26single%3Dtrue%26output%3Dcsv&strip-headers=on&format=html&filter01=cut&cut-include-tags01=%23adm3%2Bcode%2C%23reached%2Bhouseholds&cut-exclude-tags01=&filter02=count&count-tags02=%23adm3%2Bcode&count-aggregate-tag02=%23reached%2Bhouseholds&filter03=&filter04=&filter05=&filter06=&filter07=';
 var geom = topojson.feature(nepal_adm3,nepal_adm3.objects.nepal_adm3);
 geom.features.forEach(function(e){
     e.properties[config.joinAttribute] = String(e.properties[config.joinAttribute]); 
 });
-
+$('#info_row').hide();
 initDash(config,geom);
