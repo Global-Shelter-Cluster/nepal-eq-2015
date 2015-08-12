@@ -85,3 +85,51 @@
  #loading{
     text-align:center;
  }
+
+.btn {
+    background-color:#7F1416;
+    border-color:#7F1416;
+}
+
+.btn:hover {
+    background-color:#7F1416;
+    border-color:#7F1416;
+ }
+
+ #district_name {
+    margin:0px;
+ }
+
+table { 
+    table-layout: fixed;
+    width:100%;
+}
+
+th {
+   font-size:0.1em;
+   padding-bottom:10px;
+   border-bottom-width:1px;
+   border-bottom-style:solid;
+}
+
+td {
+   font-size:0.1em;
+   padding-top:5px;
+   padding-bottom:5px;
+}
+
+tr:hover{
+    background-color:#ffeeee;
+}
+
+ .number {
+    text-align:right;
+ }
+
+ .damage {
+    color:#7F1416;
+ }
+
+ a {
+    color:#7F1416;
+ }
