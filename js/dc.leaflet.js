@@ -639,7 +639,7 @@ dc.leafletChoroplethChart = function (parent, chartGroup) {
         if (v && v.d) {
             if (_chart.hasFilter()) {
                 if (isSelectedGeo(v.d)) {
-                    options.fillColor = _chart.getColor(v.d.value, v.i);
+                    options.fillColor = _chart.getColor(_chart.valueAccessor()(v.d), v.i);
                     options.opacity = 1;
                     options.fillOpacity = 0.5;                                
                 } else {
@@ -648,7 +648,7 @@ dc.leafletChoroplethChart = function (parent, chartGroup) {
                     options.fillOpacity = 0.5;                                
                 }
             } else {
-                options.fillColor = _chart.getColor(v.d.value, v.i);
+                options.fillColor = _chart.getColor(_chart.valueAccessor()(v.d), v.i);
                 options.opacity = 1;
                 options.fillOpacity = 0.5;                 
             }           
@@ -761,7 +761,7 @@ dc.leafletChoroplethChart = function (parent, chartGroup) {
         var v = _dataMap[_chart.featureKeyAccessor()(feature)];
                 layer.on("mouseover",function(){
                     if(v!==undefined){
-                        var info = _chart.popup()(feature) +": " +v.d.value;
+                        var info = _chart.popup()(feature) +": " +_chart.valueAccessor()(v.d)
                     } else {
                         var info = _chart.popup()(feature);
                     }
