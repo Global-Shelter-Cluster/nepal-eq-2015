@@ -118,7 +118,11 @@ td {
    padding-bottom:5px;
 }
 
-tr:hover{
+.datarow:hover {
+    background-color:#ffeeee; 
+}
+
+.highlight {
     background-color:#ffeeee;
 }
 
