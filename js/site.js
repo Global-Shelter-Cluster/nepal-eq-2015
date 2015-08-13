@@ -38,13 +38,21 @@ function initDash(config,geom){
 
     map.addLayer(baselayer);
 
-    var overlay = L.geoJson(geom,{
-        style:{
-            fillColor: "#7F1416",
+    overlay = L.geoJson(geom,{
+        style: function(f){
+            if(f.properties.HUB=='West'){
+                var color = '#7F1416';
+            } else if (f.properties.HUB=='Central') {
+                var color = '#A46465';
+            } else {
+                var color = '#CAB4B5';
+            }
+            return {
+            fillColor: color,
             color: "#7F1416",
             weight: 3,
             opacity: 1,
-            fillOpacity: 0.1
+            fillOpacity: 0.5};
         },
         onEachFeature: onEachFeature
     }).addTo(map);
@@ -72,7 +80,7 @@ function onEachFeature(feature, layer) {
         //suspect e.target.feature.properties.DISTRICT will not work on multi-polygons
         $('#district_name').html(e.target.feature.properties.DISTRICT);
         //var url = 'http://beta.proxy.hxlstandard.org/data.json?filter_count=7&url=https%3A//docs.google.com/spreadsheets/d/1Z4YWDKWnrSJPcyFEyHawRck0SrXg6R0hBriH7gBZuqA/export%3Fformat%3Dcsv%26id%3D1Z4YWDKWnrSJPcyFEyHawRck0SrXg6R0hBriH7gBZuqA%26gid%3D0&strip-headers=on&format=html&filter01=cut&cut-include-tags01=%23adm3%2Bcode%2C%23adm4%2Bcode%2C%23org%2Bimplementing%2C%23activity%2Bdescription%2C%23status%2C%23reached%2Buse%2C%23indicator&cut-exclude-tags01=&filter02=select&force=1&select-query02-01=adm3%2Bcode%3D'+e.target.feature.properties.HLCIT_CODE
-        var url = 'http://beta.proxy.hxlstandard.org/data.json?filter_count=7&url=https%3A//docs.google.com/spreadsheets/d/1Z4YWDKWnrSJPcyFEyHawRck0SrXg6R0hBriH7gBZuqA/pub%3Fgid%3D0%26single%3Dtrue%26output%3Dcsv&strip-headers=on&format=html&filter01=cut&cut-include-tags01=%23adm3%2Bcode%2C%23adm4%2Bcode%2C%23org%2Bimplementing%2C%23activity%2Bdescription%2C%23reached%2Bhouseholds%2C%23indicator%2Bparent%2C%23status&cut-exclude-tags01=&filter02=select&select-query02-01=%23adm3%2Bcode%3D'+e.target.feature.properties.HLCIT_CODE;
+        var url = 'http://beta.proxy.hxlstandard.org/data.json?filter_count=7&url=https%3A//docs.google.com/spreadsheets/d/1Z4YWDKWnrSJPcyFEyHawRck0SrXg6R0hBriH7gBZuqA/pub%3Fgid%3D0%26single%3Dtrue%26output%3Dcsv&strip-headers=on&format=html&filter01=cut&cut-include-tags01=%23adm3%2Bcode%2C%23adm4%2Bcode%2C%23org%2Bimplementing%2C%23activity%2Bdescription%2C%23reached%2Bhouseholds%2C%23status&cut-exclude-tags01=&filter02=select&select-query02-01=%23adm3%2Bcode%3D'+e.target.feature.properties.HLCIT_CODE;
         var dataCall = $.ajax({ 
             type: 'GET', 
             url: url, 
@@ -81,6 +89,14 @@ function onEachFeature(feature, layer) {
                 console.log(exception);
             }
         });
+        overlay.setStyle({
+            fillColor: "#7F1416",
+            color: "#7F1416",
+            weight: 3,
+            opacity: 1,
+            fillOpacity: 0.1
+        });
+
 
         //load geometry
 
@@ -99,6 +115,13 @@ function onEachFeature(feature, layer) {
             map.invalidateSize();
             $('#info_row').show();
             var data = hxlProxyToJSON(dataArgs[0])
+            data.forEach(function(d){
+                if(d['#adm4+code']=='') {
+                    d["#indicator+parent"] = 'No';
+                } else {
+                    d["#indicator+parent"] = 'Yes';
+                }
+            })
             var geom = topojson.feature(geomArgs[0],geomArgs[0].objects[e.target.feature.properties.DISTRICT]);
             $('#modal').modal('hide');
             generate3WComponent(config,data,geom,map)
@@ -107,13 +130,13 @@ function onEachFeature(feature, layer) {
 
     layer.on('mouseover', function(e){
         $('.hdx-3w-info').html('Click to view '+e.target.feature.properties.DISTRICT);
-        $('.adm'+e.target.feature.properties['HLCIT_CODE'].replace(/ /g,'_')).css('background-color','#ffeeee');
+        $('.adm'+e.target.feature.properties['HLCIT_CODE'].replace(/ /g,'_')).addClass('highlight');
     })
 
     layer.on('mouseout', function(e){
         $('.hdx-3w-info').html('Click a district to see district level data');
-        $('.adm'+e.target.feature.properties['HLCIT_CODE'].replace(/ /g,'_')).css('background-color','#ffffff');
-    })    
+        $('.adm'+e.target.feature.properties['HLCIT_CODE'].replace(/ /g,'_')).removeClass('highlight');
+    })
 }
 
 function generate3WComponent(config,data,geom,map){
@@ -150,7 +173,26 @@ function generate3WComponent(config,data,geom,map){
     var whatGroup = whatDimension.group().reduceSum(function(d) {return d[config.groupFieldName];});
     var statusGroup = statusDimension.group().reduceSum(function(d) {return d[config.groupFieldName];});
     var districtlevelGroup = districtlevelDimension.group().reduceSum(function(d) {return d[config.groupFieldName];});
-    var whereGroup = whereDimension.group().reduceSum(function(d) {return d[config.groupFieldName];});
+    /*var whereGroup = whereDimension.group().reduce(
+        function (p, d) {
+            console.log(d);
+            if( d.org in p.orgs)
+                p.orgs[d[config.whoFieldName]]++;
+            else p.orgs[d[config.whoFieldName]] = 1;
+            return p;
+        },
+        function (p, d) {
+            p.orgs[d[config.whoFieldName]]--;
+            if(p.orgs[d[config.whoFieldName]] === 0)
+                delete p.orgs[d[config.whoFieldName]];
+            return p;
+        },
+        function () {
+            return {orgs: {}};
+        });*/
+
+    whereGroup = whereDimension.group();
+
     var all = cf.groupAll();
 
     whoChart.width($('#rc-3W-who').width()).height(750)
@@ -213,27 +255,32 @@ function generate3WComponent(config,data,geom,map){
             .center([0,0])
             .zoom(0)    
             .geojson(geom)
+            /*.valueAccessor(function(v){
+                var size = 0, key;
+                for (key in v.orgs) {
+                    if (v.orgs.hasOwnProperty(key)) size++;
+                }
+                return size;
+            })*/
             .colors(config.colors)
             .colorDomain([0, 5])
             .colorAccessor(function (d) {
                 var c=0;
-                if(d>5000){
+                if(d>9){
                     c=5;
-                } else if (d>1000) {
+                } else if (d>4) {
                     c=4;
-                } else if (d>250) {
+                } else if (d>2) {
                     c=3;
-                } else if (d>100) {
+                } else if (d>0) {
                     c=2;
-                }  else if (d>0) {
-                    c=1;
-                } 
+                }
                 return c;
             })           
             .featureKeyAccessor(function(feature){
                 return feature.properties[config.joinAttribute];
             }).popup(function(feature){
-                return feature.properties[config.nameAttribute] + ' - HHs reached';
+                return feature.properties[config.nameAttribute] +' - Activities';
             })
             .renderPopup(true)
             .featureOptions({
@@ -331,7 +378,7 @@ function stripIfNull(input){
 
 function loadDatatable(){
     var activityurl = 'http://beta.proxy.hxlstandard.org/data.json?filter_count=7&url=https%3A//docs.google.com/spreadsheets/d/1Z4YWDKWnrSJPcyFEyHawRck0SrXg6R0hBriH7gBZuqA/pub%3Fgid%3D0%26single%3Dtrue%26output%3Dcsv&strip-headers=on&format=html&filter01=cut&cut-include-tags01=%23adm3%2Bcode%2C%23reached%2Bhouseholds%2C%23activity%2Bdescription&cut-exclude-tags01=&filter02=count&count-tags02=%23adm3%2Bcode%2C%23activity%2Bdescription&count-aggregate-tag02=%23reached%2Bhouseholds&filter03=&filter04=&filter05=&filter06=&filter07=';
-    var damageurl ='http://proxy.hxlstandard.org/data.json?filter_count=7&strip-headers=on&url=https%3A//docs.google.com/spreadsheets/d/1Z4YWDKWnrSJPcyFEyHawRck0SrXg6R0hBriH7gBZuqA/pub%3Fgid%3D975313202%26single%3Dtrue%26output%3Dcsv&format=html';
+    var damageurl ='http://beta.proxy.hxlstandard.org/data.json?filter_count=7&strip-headers=on&url=https%3A//docs.google.com/spreadsheets/d/1Z4YWDKWnrSJPcyFEyHawRck0SrXg6R0hBriH7gBZuqA/pub%3Fgid%3D975313202%26single%3Dtrue%26output%3Dcsv&format=html';
 
     var activityCall = $.ajax({ 
             type: 'GET', 
@@ -368,7 +415,7 @@ function loadDatatable(){
         
         
         geom.features.forEach(function(f){
-            table+='<tr class="adm' + f.properties['HLCIT_CODE'].replace(/ /g,'_') + '"><td>'+f.properties.DISTRICT+'</td>';
+            table+='<tr class="datarow adm' + f.properties['HLCIT_CODE'].replace(/ /g,'_') + '"><td>'+f.properties.DISTRICT+'</td>';
             var damagevalue = 0;
             damage.forEach(function(d){
                 if(d['#adm3+code']==f.properties['HLCIT_CODE']){
@@ -377,7 +424,6 @@ function loadDatatable(){
             })
             table+='<td class="number damage">'+damagevalue+'</td>';
 
-            console.log(f.properties['HLCIT_CODE']);
             geoDimension.filter(f.properties['HLCIT_CODE']);
             activitylist.forEach(function(k){
                 var value = 0;
@@ -400,6 +446,7 @@ var lookUpVDCCodeToName;
 var data;
 var dcGeoLayer = '';
 var geom = topojson.feature(nepal_adm3,nepal_adm3.objects.nepal_adm3);
+var overlay;
 geom.features.forEach(function(e){
     e.properties[config.joinAttribute] = String(e.properties[config.joinAttribute]); 
 });
