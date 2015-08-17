@@ -106,14 +106,14 @@ table {
 }
 
 th {
-   font-size:0.1em;
+   font-size:1em;
    padding-bottom:10px;
    border-bottom-width:1px;
    border-bottom-style:solid;
 }
 
 td {
-   font-size:0.1em;
+   font-size:1em;
    padding-top:5px;
    padding-bottom:5px;
 }
