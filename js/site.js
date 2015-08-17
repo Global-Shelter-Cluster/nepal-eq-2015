@@ -405,7 +405,7 @@ function loadDatatable(){
         var activityGroup = activityDimension.group().reduceSum(function(d){return d['#meta+sum'];});
         var table = '<table><tr><th></th><th class="number damage">Damage</th>';
         var activitylist = [];
-        activityGroup.top(Infinity).forEach(function(d){
+        activityGroup.top(5).forEach(function(d){
             if(d.value>0){
                 activitylist.push(d.key)
                 table+='<th class="number">'+d.key+'</th>';
