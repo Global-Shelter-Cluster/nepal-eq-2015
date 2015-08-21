@@ -145,7 +145,7 @@ function generate3WComponent(config,data,geom,map){
     $('#rc-3W-who').html('<p>Who | Current filter: <span class="filter"></span></span></p>');
     $('#rc-3W-what').html('<p>What | Current filter: <span class="filter"></span></span></p>');
     $('#rc-3W-status').html('<p>Status | Current filter: <span class="filter"></span></span></p>');
-    $('#rc-3W-districtlevel').html('<p>Declared at district level | Current filter: <span class="filter"></span></span></p>');
+    $('#rc-3W-districtlevel').html('<p>VDCs working in given | Current filter: <span class="filter"></span></span></p>');
     $('.hdx-3w-info').remove();
 
     if(dcGeoLayer!=''){
@@ -377,7 +377,7 @@ function stripIfNull(input){
 }
 
 function loadDatatable(){
-    var activityurl = 'http://beta.proxy.hxlstandard.org/data.json?filter_count=7&url=https%3A//docs.google.com/spreadsheets/d/1Z4YWDKWnrSJPcyFEyHawRck0SrXg6R0hBriH7gBZuqA/pub%3Fgid%3D0%26single%3Dtrue%26output%3Dcsv&strip-headers=on&format=html&filter01=cut&cut-include-tags01=%23adm3%2Bcode%2C%23reached%2Bhouseholds%2C%23activity%2Bdescription&cut-exclude-tags01=&filter02=count&count-tags02=%23adm3%2Bcode%2C%23activity%2Bdescription&count-aggregate-tag02=%23reached%2Bhouseholds&filter03=&filter04=&filter05=&filter06=&filter07=';
+    var activityurl = 'http://beta.proxy.hxlstandard.org/data.json?filter_count=7&url=https%3A//docs.google.com/spreadsheets/d/1Z4YWDKWnrSJPcyFEyHawRck0SrXg6R0hBriH7gBZuqA/pub%3Fgid%3D0%26single%3Dtrue%26output%3Dcsv&strip-headers=on&format=html&filter01=cut&cut-include-tags01=adm3%2Bcode%2Creached%2Bhouseholds%2Cactivity%2Bdescription&cut-exclude-tags01=&filter02=count&count-tags02=%23adm3%2Bcode%2C%23activity%2Bdescription&count-aggregate-tag02=%23reached%2Bhouseholds&filter03=&filter04=&filter05=&filter06=&filter07=';
     var damageurl ='http://beta.proxy.hxlstandard.org/data.json?filter_count=7&strip-headers=on&url=https%3A//docs.google.com/spreadsheets/d/1Z4YWDKWnrSJPcyFEyHawRck0SrXg6R0hBriH7gBZuqA/pub%3Fgid%3D975313202%26single%3Dtrue%26output%3Dcsv&format=html';
 
     var activityCall = $.ajax({ 
