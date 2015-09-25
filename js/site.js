@@ -419,7 +419,7 @@ function loadDatatable(){
             var damagevalue = 0;
             damage.forEach(function(d){
                 if(d['#adm3+code']==f.properties['HLCIT_CODE']){
-                    damagevalue = d['#affected+households'];
+                    damagevalue = Math.round(d['#affected+households']);
                 }
             })
             table+='<td class="number damage">'+damagevalue+'</td>';
@@ -429,7 +429,7 @@ function loadDatatable(){
                 var value = 0;
                 activityGroup.top(Infinity).forEach(function(d){
                     if(d.key==k){
-                        value =d.value;
+                        value =Math.round(d.value);
                     }
                 });
                 table +='<td class="number">'+value+'</td>';
