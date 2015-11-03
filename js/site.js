@@ -2,7 +2,7 @@
 
 var config = {
     title:"Nepal Earthquake Shelter Cluster Activity Dashboard",
-    description:"Shelter Cluster dashboard showing shelter activities in the 14 priority districts in response to Nepal 2015 Earthquakes. Select a district on the map to view activities happening in that area.  The graphs and map can be clicked to be filtered.  Data can be downloaded from <a target='_blank' href='https://data.hdx.rwlabs.org/dataset/scnepal-agency-data'>HDX</a>.",
+    description:"Shelter Cluster dashboard showing shelter activities in the 14 priority districts in response to Nepal 2015 Earthquakes. Select a district on the map to view activities happening in that area.  The graphs and map can be clicked to be filtered.  Data can be downloaded from <a target='_blank' href='https://data.hdx.rwlabs.org/dataset/scnepal-agency-data'>HDX</a>.   Click <a href='gap.html'>here</a> to view the gap maps.",
     data:"data/data.json",
     whoFieldName:"#org+implementing",
     whatFieldName:"#activity+description",
