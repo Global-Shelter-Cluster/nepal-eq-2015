@@ -202,7 +202,7 @@ function generateGapComponent(config,data,geom,map){
 
     function onEachFeature(feature,layer){
         layer.on('mouseover',function(e){
-            $('.hdx-3w-info').html(d3.format("%")(e.target.feature.properties[att]));
+            $('.hdx-3w-info').html(e.target.feature.properties.VDC_NAME+' - '+d3.format("%")(e.target.feature.properties[att]));
         })
         layer.on('mouseout',function(e){
             $('.hdx-3w-info').html('Hover VDC for gap info');
