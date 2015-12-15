@@ -7,7 +7,7 @@ var config = {
     whoFieldName:"#org+implementing",
     whatFieldName:"#activity+description",
     whereFieldName:"#adm4+code",
-    statusFieldName:"#status",
+    statusFieldName:"#status",h
     groupFieldName:"#reached+households",
     districtlevelFieldName:"#indicator+parent",
     geo:"data/nepal_adm3.json",
@@ -102,7 +102,7 @@ function zoomToADM4(districtName,districtCode){
         }
         $('#district_name').html(districtName + ' - ' + text);
         //var url = 'http://beta.proxy.hxlstandard.org/data.json?filter_count=7&url=https%3A//docs.google.com/spreadsheets/d/1Z4YWDKWnrSJPcyFEyHawRck0SrXg6R0hBriH7gBZuqA/export%3Fformat%3Dcsv%26id%3D1Z4YWDKWnrSJPcyFEyHawRck0SrXg6R0hBriH7gBZuqA%26gid%3D0&strip-headers=on&format=html&filter01=cut&cut-include-tags01=%23adm3%2Bcode%2C%23adm4%2Bcode%2C%23org%2Bimplementing%2C%23activity%2Bdescription%2C%23status%2C%23reached%2Buse%2C%23indicator&cut-exclude-tags01=&filter02=select&force=1&select-query02-01=adm3%2Bcode%3D'+e.target.feature.properties.HLCIT_CODE
-        var url = 'http://proxy.hxlstandard.org/data.json?filter01=select&strip-headers=on&url=https%3A//docs.google.com/spreadsheets/d/1Z4YWDKWnrSJPcyFEyHawRck0SrXg6R0hBriH7gBZuqA/pub%3Fgid%3D1857051232%26single%3Dtrue%26output%3Dcsv&force=1&select-query01-01=adm3%2Bcode%3D'+districtCode;
+        var url = 'https://proxy.hxlstandard.org/data.json?filter01=select&strip-headers=on&url=https%3A//docs.google.com/spreadsheets/d/1Z4YWDKWnrSJPcyFEyHawRck0SrXg6R0hBriH7gBZuqA/pub%3Fgid%3D1857051232%26single%3Dtrue%26output%3Dcsv&force=1&select-query01-01=adm3%2Bcode%3D'+districtCode;
         var dataCall = $.ajax({ 
             type: 'GET', 
             url: url, 
@@ -273,8 +273,8 @@ function stripIfNull(input){
 }
 
 function loadDatatable(){
-    var activityurl = 'http://beta.proxy.hxlstandard.org/data.json?filter_count=7&url=https%3A//docs.google.com/spreadsheets/d/1Z4YWDKWnrSJPcyFEyHawRck0SrXg6R0hBriH7gBZuqA/pub%3Fgid%3D0%26single%3Dtrue%26output%3Dcsv&strip-headers=on&format=html&filter01=cut&cut-include-tags01=adm3%2Bcode%2Creached%2Bhouseholds%2Cactivity%2Bdescription&cut-exclude-tags01=&filter02=count&count-tags02=%23adm3%2Bcode%2C%23activity%2Bdescription&count-aggregate-tag02=%23reached%2Bhouseholds&filter03=&filter04=&filter05=&filter06=&filter07=';
-    var damageurl ='http://beta.proxy.hxlstandard.org/data.json?filter_count=7&strip-headers=on&url=https%3A//docs.google.com/spreadsheets/d/1Z4YWDKWnrSJPcyFEyHawRck0SrXg6R0hBriH7gBZuqA/pub%3Fgid%3D975313202%26single%3Dtrue%26output%3Dcsv&format=html';
+    var activityurl = 'https://beta.proxy.hxlstandard.org/data.json?filter_count=7&url=https%3A//docs.google.com/spreadsheets/d/1Z4YWDKWnrSJPcyFEyHawRck0SrXg6R0hBriH7gBZuqA/pub%3Fgid%3D0%26single%3Dtrue%26output%3Dcsv&strip-headers=on&format=html&filter01=cut&cut-include-tags01=adm3%2Bcode%2Creached%2Bhouseholds%2Cactivity%2Bdescription&cut-exclude-tags01=&filter02=count&count-tags02=%23adm3%2Bcode%2C%23activity%2Bdescription&count-aggregate-tag02=%23reached%2Bhouseholds&filter03=&filter04=&filter05=&filter06=&filter07=';
+    var damageurl ='https://beta.proxy.hxlstandard.org/data.json?filter_count=7&strip-headers=on&url=https%3A//docs.google.com/spreadsheets/d/1Z4YWDKWnrSJPcyFEyHawRck0SrXg6R0hBriH7gBZuqA/pub%3Fgid%3D975313202%26single%3Dtrue%26output%3Dcsv&format=html';
 
     var activityCall = $.ajax({ 
             type: 'GET', 
