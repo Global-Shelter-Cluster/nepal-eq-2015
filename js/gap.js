@@ -7,7 +7,7 @@ var config = {
     whoFieldName:"#org+implementing",
     whatFieldName:"#activity+description",
     whereFieldName:"#adm4+code",
-    statusFieldName:"#status",h
+    statusFieldName:"#status",
     groupFieldName:"#reached+households",
     districtlevelFieldName:"#indicator+parent",
     geo:"data/nepal_adm3.json",
