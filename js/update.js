@@ -33,6 +33,6 @@ geom.features.forEach(function(f,i){
 
 geom.features.forEach(function(f,i){
    console.log(i);
-   var url = 'http://proxy.hxlstandard.org/data.json?filter01=select&strip-headers=on&url=https%3A//docs.google.com/spreadsheets/d/1Z4YWDKWnrSJPcyFEyHawRck0SrXg6R0hBriH7gBZuqA/pub%3Fgid%3D1857051232%26single%3Dtrue%26output%3Dcsv&force=1&select-query01-01=adm3%2Bcode%3D'+f.properties.HLCIT_CODE+'&force=1';
+   var url = 'https://proxy.hxlstandard.org/data.json?filter01=select&strip-headers=on&url=https%3A//docs.google.com/spreadsheets/d/1Z4YWDKWnrSJPcyFEyHawRck0SrXg6R0hBriH7gBZuqA/pub%3Fgid%3D1857051232%26single%3Dtrue%26output%3Dcsv&force=1&select-query01-01=adm3%2Bcode%3D'+f.properties.HLCIT_CODE+'&force=1';
    setTimeout(function(){update(url,f.properties.DISTRICT+'gap',f.properties.DISTRICT + ' Gap Map')},4000*i);
 })
